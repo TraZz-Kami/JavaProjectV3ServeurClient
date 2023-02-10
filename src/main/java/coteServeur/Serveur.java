@@ -13,6 +13,8 @@ import java.util.List;
 public class Serveur {
     static String nomDriverJDBC = "com.mysql.cj.jdbc.Driver";
     static String urlDB = "jdbc:mysql://localhost:3306/mabd";
+    static String usernameDB = "root";
+    static String passwordDB = "";
     static Connection maCo = null;
     static Statement monStatement=null;
     public static void main(String[] args) throws IOException {
@@ -25,20 +27,18 @@ public class Serveur {
                     "Livres (" +
                     "ID_Livre " + "INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
                     "Titre " + "VARCHAR(100)," +
-                    "Auteur " + "VARCHAR(100)," +
-                    "DateEdition " + "DATE" +
+                    "Auteur " + "VARCHAR(100)" +
                     ");";
             String requeteCreateLecteurs = "CREATE TABLE IF NOT EXISTS " +
                     "Lecteurs (" +
                     "ID_Lecteur " + "INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
                     "Nom " + "VARCHAR(100)," +
-                    "Prenom " + "VARCHAR(100)," +
-                    "Livre_Lu " + "VARCHAR(500)" +
+                    "Prenom " + "VARCHAR(100)" +
                     ");";
             Class.forName(nomDriverJDBC);
             System.out.println("Chargement du Driver : OK");
 
-            maCo = DriverManager.getConnection(urlDB,"root","");
+            maCo = DriverManager.getConnection(urlDB,usernameDB,passwordDB);
             System.out.println("Connexion élaborée");
 
             monStatement = maCo.createStatement();
@@ -109,33 +109,28 @@ public class Serveur {
      }*/
 
     public static void addLivreToDB(Livre livre){
-        String dbURL = "jdbc:mysql://localhost:3306/mabd";
-        String username = "root";
-        String password = "";
 
-        Connection conn = null;
-        PreparedStatement stmt = null;
-
+        PreparedStatement monStatement = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(dbURL, username, password);
+            maCo = DriverManager.getConnection(urlDB, usernameDB, passwordDB);
 
-            String sql = "INSERT INTO livres (titre, Auteur) VALUES (?, ?)";
+            String sql = "INSERT INTO livres (Titre, Auteur) VALUES (?, ?)";
 
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, livre.getTitre());
-            stmt.setString(2, livre.getNomAuteur() + " " + livre.getPrenomAuteur());
-            stmt.executeUpdate();
+            monStatement = maCo.prepareStatement(sql);
+            monStatement.setString(1, livre.getTitre());
+            monStatement.setString(2, livre.getAuteur());
+            monStatement.executeUpdate();
 
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (stmt != null) {
-                    stmt.close();
+                if (monStatement != null) {
+                    monStatement.close();
                 }
-                if (conn != null) {
-                    conn.close();
+                if (maCo != null) {
+                    maCo.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -144,20 +139,16 @@ public class Serveur {
     }
 
     public static void addLecteurToDB(Lecteur lecteur){
-        String dbURL = "jdbc:mysql://localhost:3306/mabd";
-        String username = "root";
-        String password = "";
 
-        Connection conn = null;
         PreparedStatement stmt = null;
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(dbURL, username, password);
+            maCo = DriverManager.getConnection(urlDB, usernameDB, passwordDB);
 
             String sql = "INSERT INTO lecteurs (nom, prenom) VALUES (?, ?)";
 
-            stmt = conn.prepareStatement(sql);
+            stmt = maCo.prepareStatement(sql);
             stmt.setString(1, lecteur.getNomLecteur());
             stmt.setString(2, lecteur.getPrenomLecteur());
             stmt.executeUpdate();
@@ -169,8 +160,8 @@ public class Serveur {
                 if (stmt != null) {
                     stmt.close();
                 }
-                if (conn != null) {
-                    conn.close();
+                if (maCo != null) {
+                    maCo.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -179,30 +170,26 @@ public class Serveur {
     }
 
     public static List<Lecteur> getLecteursFromDB() {
-        String dbURL = "jdbc:mysql://localhost:3306/mabd";
-        String username = "root";
-        String password = "";
 
-        Connection conn = null;
-        Statement stmt = null;
         ResultSet rs = null;
 
         List<Lecteur> lecteurs = new ArrayList<>();
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection(dbURL, username, password);
+            maCo = DriverManager.getConnection(urlDB, usernameDB, passwordDB);
 
             String sql = "SELECT * FROM lecteurs";
 
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(sql);
+            monStatement = maCo.createStatement();
+            rs = monStatement.executeQuery(sql);
 
             while (rs.next()) {
-                String nom = rs.getString("nom");
-                String prenom = rs.getString("prenom");
+                String nom = rs.getString("Nom");
+                String prenom = rs.getString("Prenom");
+                int id = rs.getInt("ID_Lecteur");
 
-                Lecteur lecteur = new Lecteur(nom, prenom);
+                Lecteur lecteur = new Lecteur(prenom, nom,id);
                 lecteurs.add(lecteur);
             }
 
@@ -213,11 +200,11 @@ public class Serveur {
                 if (rs != null) {
                     rs.close();
                 }
-                if (stmt != null) {
-                    stmt.close();
+                if (monStatement != null) {
+                    monStatement.close();
                 }
-                if (conn != null) {
-                    conn.close();
+                if (maCo != null) {
+                    maCo.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -227,4 +214,50 @@ public class Serveur {
         return lecteurs;
     }
 
+    public static List<Livre> getLivresFromBD() {
+
+        ResultSet rs = null;
+
+        List<Livre> livres = new ArrayList<>();
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            maCo = DriverManager.getConnection(urlDB, usernameDB, passwordDB);
+
+            String sql = "SELECT * FROM livres";
+
+            monStatement = maCo.createStatement();
+            rs = monStatement.executeQuery(sql);
+
+            while (rs.next()) {
+                String titre = rs.getString("Titre");
+                String auteur = rs.getString("Auteur");
+                int id = rs.getInt("ID_Livre");
+
+
+                Livre livre = new Livre(id,titre, auteur);
+                livres.add(livre);
+            }
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (monStatement != null) {
+                    monStatement.close();
+                }
+                if (maCo != null) {
+                    maCo.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return livres;
+    }
 }
+

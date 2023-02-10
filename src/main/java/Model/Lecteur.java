@@ -29,7 +29,23 @@ public class Lecteur {
         this.nomLecteur = nomLecteur;
     }
 
-    public Lecteur(String prenomAuteur, String nomAuteur) {
+    public Lecteur(String prenomLecteur, String nomLecteur) {
+        this.prenomLecteur= prenomLecteur;
+        this.nomLecteur = nomLecteur;
+    }
 
+    public Lecteur(String prenomLecteur, String nomLecteur, int idLecteur) {
+        this.id=idLecteur;
+        this.prenomLecteur= prenomLecteur;
+        this.nomLecteur = nomLecteur;
+    }
+
+    @Override
+    public String toString() {
+        return "Lecteur { " +
+                "id=" + id +
+                ", prenomLecteur='" + prenomLecteur  +
+                ", nomLecteur='" + nomLecteur + " " +
+                '}';
     }
 }

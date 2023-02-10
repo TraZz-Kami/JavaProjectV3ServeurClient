@@ -1,19 +1,27 @@
 package Model;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
+
 public class Livre {
 
     private int id;
 
     private String titre;
 
-    private String nomAuteur;
+    private String auteur;
 
-    private String prenomAuteur;
 
-    public Livre(String titre, String nomAuteur, String prenomAuteur) {
+    public Livre(String titre, String auteur) {
         this.titre = titre;
-        this.nomAuteur = nomAuteur;
-        this.prenomAuteur = prenomAuteur;
+        this.auteur = auteur;
+    }
+
+    public Livre(int idLivre, String titre, String auteur) {
+        this.id = idLivre;
+        this.titre = titre;
+        this.auteur = auteur;
     }
 
     public int getId() {
@@ -28,23 +36,22 @@ public class Livre {
         return titre;
     }
 
-    public void setTitre(String titre) {
-        this.titre = titre;
+    public void setTitre(String titre) { this.titre = titre; }
+
+    public String getAuteur() {
+        return auteur;
     }
 
-    public String getNomAuteur() {
-        return nomAuteur;
+    public void setAuteur(String auteur) {
+        this.auteur = auteur;
     }
 
-    public void setNomAuteur(String nomAuteur) {
-        this.nomAuteur = nomAuteur;
-    }
-
-    public String getPrenomAuteur() {
-        return prenomAuteur;
-    }
-
-    public void setPrenomAuteur(String prenomAuteur) {
-        this.prenomAuteur = prenomAuteur;
+    @Override
+    public String toString() {
+        return "Livre{ " +
+                "id=" + id +
+                ", titre='" + titre  +
+                ", auteur='" + auteur + " " +
+                '}';
     }
 }

@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -42,24 +43,35 @@ public class Client {
 
     protected static void addLivre(){
         String titre;
-        String prenomAuteur;
-        String nomAuteur;
+        String auteur;
 
         System.out.println();
         System.out.println("----- Ajouter un livre -----");
         System.out.print("Le titre: ");
         titre = sc.nextLine();
         System.out.print("Le prenom de l'auteur: ");
-        prenomAuteur = sc.nextLine();
+        String prenomAuteur = sc.nextLine();
         System.out.print("Le nom de l'auteur: ");
-        nomAuteur = sc.nextLine();
+        String nomAuteur = sc.nextLine();
+        auteur = nomAuteur + " " + prenomAuteur;
 
-        Livre livre = new Livre(titre, prenomAuteur, nomAuteur);
+
+        Livre livre = new Livre(titre, auteur);
         Serveur.addLivreToDB(livre);
     }
 
     protected static void showLivres(){
         // add code to receive the list of books from the server side
+        System.out.println();
+        System.out.println("----- Afficher un livre -----");
+        List<Livre> livreList = Serveur.getLivresFromBD();
+        if(livreList.isEmpty()){
+            System.out.println("Il n'y a pas de lecteur d'enregistrer");
+        }else {
+            for (Livre livre : livreList) {
+                System.out.println(livre);
+            }
+        }
     }
 
     protected static void addLecteur(){
@@ -85,7 +97,7 @@ public class Client {
             System.out.println("Il n'y a pas de lecteur d'enregistrer");
         }else {
             for (Lecteur lecteur : listLecteur) {
-                System.out.println("| "+ lecteur.getId() + " | " + lecteur.getNomLecteur() + " | " + lecteur.getPrenomLecteur() + " |");
+                System.out.println(lecteur);
             }
         }
     }

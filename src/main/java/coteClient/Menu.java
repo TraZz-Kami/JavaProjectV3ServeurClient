@@ -1,12 +1,15 @@
 package coteClient;
+import coteServeur.Serveur;
+
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Menu {
     private static Scanner sc = new Scanner(System.in);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Serveur.main(null);
         int userChoice;
-
         if (!Client.connectClient()) {
             System.out.println("Failed to connect to the server. Exiting.");
             return;
@@ -18,8 +21,8 @@ public class Menu {
             System.out.println("----- Menu -----");
             System.out.println("1. Ajouter un livre");
             System.out.println("2. Afficher les livres");
-            System.out.println("3. Ajouter un auteur");
-            System.out.println("4. Afficher les auteurs");
+            System.out.println("3. Ajouter un lecteur");
+            System.out.println("4. Afficher les lecteurs");
             System.out.println("5. Quitter");
             System.out.print("Votre choix: ");
             userChoice = sc.nextInt();
