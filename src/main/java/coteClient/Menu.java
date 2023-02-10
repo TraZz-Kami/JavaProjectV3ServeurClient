@@ -10,6 +10,7 @@ public class Menu {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
+        //Crée un thread pour avoir le serveur en fond
         threadServeur threadServeur = new threadServeur();
         threadServeur.start();
         try {
@@ -17,7 +18,9 @@ public class Menu {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         int userChoice;
+        // Permet de vérifier si le client se connecte correctement ou non
         if (!Client.connectClient()) {
             System.out.println("Failed to connect to the server. Exiting.");
             return;
@@ -25,6 +28,7 @@ public class Menu {
             System.out.println("Connected successfully !");
         }
 
+        // Affiche les différentes options
         do {
             System.out.println("----- Menu -----");
             System.out.println("1. Ajouter un livre");
@@ -35,7 +39,7 @@ public class Menu {
             System.out.print("Votre choix: ");
             userChoice = sc.nextInt();
             sc.nextLine();
-
+            // Switch case des options
             switch (userChoice) {
                 case 1 -> Client.addLivre();
                 case 2 -> Client.showLivres();
