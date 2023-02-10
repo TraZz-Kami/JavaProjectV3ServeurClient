@@ -1,103 +1,95 @@
 package coteClient;
 
+import Model.Auteur;
 import Model.Livre;
-import Model.User;
+import coteServeur.Serveur;
 
-import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class Client {
-    private static final int PORT = 3306;
-    private static final String HOST = "localhost";
-    private DataOutputStream dos;
-    private DataInputStream dis;
+    private static Scanner sc = new Scanner(System.in);
+    private static Socket socket;
+    private static DataInputStream dis;
+    private static DataOutputStream dos;
 
-
-    public void main(String[] args) {
-        Socket socket = null;
-
+    public static void main(String[] args) {
         try {
-            socket = new Socket(HOST, PORT);
-            System.out.println("Client connected to server.");
-
-            dos = new DataOutputStream(socket.getOutputStream());
+            socket = new Socket("localhost", 3307);
             dis = new DataInputStream(socket.getInputStream());
-
-            // Send request to server
-            sendDataToServer("Insert data for Livres table", dos);
-            sendDataToServer("nom_livre", dos);
-            sendDataToServer("auteur", dos);
-
-            // Read response from server
-            String response = receiveDataFromServer(dis);
-            System.out.println("Server says: " + response);
-
-            // Send request to server
-            sendDataToServer("Insert data for Lecteurs table", dos);
-            sendDataToServer("nom_lecteur", dos);
-            sendDataToServer("prenom_lecteur", dos);
-
-            // Read response from server
-            response = receiveDataFromServer(dis);
-            System.out.println("Server says: " + response);
-
+            dos = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void addLivre(Livre livre){
-        sendDataToServer("id", dos);
-        sendDataToServer(livre.getTitre(), dos);
-        sendDataToServer(livre.getNomAuteur(), dos);
-        sendDataToServer(livre.getPrenomAuteur(), dos);
-    }
-
-    public void loginClient(User user){
-        sendDataToServer("id", dos);
-        sendDataToServer(user.getPseudo(), dos);
-        sendDataToServer(user.getPassword(), dos);
-    }
-
-    public void signInClient(User user){
-        sendDataToServer("id", dos);
-        sendDataToServer(user.getPseudo(), dos);
-        sendDataToServer(user.getPassword(), dos);
-    }
-
-    public static List<Livre> showClientLivre(){
-        List<Livre> dataReceived = new ArrayList<>();;
-        dataReceived.add(new Livre("test","test","test"));
-        return dataReceived;
-    }
-
-
-    private static void sendDataToServer(String dataToSend, DataOutputStream dos) {
+    protected static boolean connectClient() {
         try {
-            dos.writeUTF(dataToSend);
-            dos.flush();
-            System.out.println("Data sent to server: " + dataToSend);
+            socket = new Socket("localhost", 3307);
+            dis = new DataInputStream(socket.getInputStream());
+            dos = new DataOutputStream(socket.getOutputStream());
         } catch (IOException e) {
-            System.out.println("Error sending data to server");
             e.printStackTrace();
-            System.exit(-3);
+            return false;
         }
+        return true;
     }
 
-    private static String receiveDataFromServer(DataInputStream dis) {
-        String dataReceived = null;
+    protected static void addLivre(){
+        String titre;
+        String prenomAuteur;
+        String nomAuteur;
+
+        System.out.println();
+        System.out.println("----- Ajouter un livre -----");
+        System.out.print("Le titre: ");
+        titre = sc.nextLine();
+        System.out.print("Le prenom de l'auteur: ");
+        prenomAuteur = sc.nextLine();
+        System.out.print("Le nom de l'auteur: ");
+        nomAuteur = sc.nextLine();
+
+        Livre livre = new Livre(titre, prenomAuteur, nomAuteur);
+        Serveur.addLivreToDB(livre);
+    }
+
+    protected static void showLivres(){
+        // add code to receive the list of books from the server side
+    }
+
+    protected static void addAuteur(){
+        String prenomAuteur;
+        String nomAuteur;
+
+        System.out.println();
+        System.out.println("----- Ajouter un auteur -----");
+        System.out.print("Le prenom de l'auteur: ");
+        prenomAuteur = sc.nextLine();
+        System.out.print("Le nom de l'auteur: ");
+        nomAuteur = sc.nextLine();
+
+        Auteur auteur = new Auteur(prenomAuteur, nomAuteur);
+        // add code to send the object auteur to the server side
+    }
+
+    protected static void showAuteurs(){
+        // add code to receive the list of authors from the server side
+    }
+
+    protected static void disconnectClient() {
         try {
-            dataReceived = dis.readUTF();
-            System.out.println("Data received from server: " + dataReceived);
+            dis.close();
+            dos.close();
+            socket.close();
+            System.out.println("Disconnected from the server");
         } catch (IOException e) {
-            System.out.println("Error receiving data from server");
             e.printStackTrace();
-            System.exit(-3);
         }
-        return dataReceived;
     }
 }
+
 
 
