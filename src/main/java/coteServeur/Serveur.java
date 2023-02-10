@@ -1,11 +1,14 @@
 package coteServeur;
 
 import Model.Livre;
+import Model.Lecteur;
 
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Serveur {
     public static void main(String[] args) throws IOException {
@@ -106,4 +109,89 @@ public class Serveur {
             }
         }
     }
+
+    public static void addLecteurToDB(Lecteur lecteur){
+        String dbURL = "jdbc:mysql://localhost:3306/mabd";
+        String username = "root";
+        String password = "";
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(dbURL, username, password);
+
+            String sql = "INSERT INTO lecteurs (nom, prenom) VALUES (?, ?)";
+
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, lecteur.getNomLecteur());
+            stmt.setString(2, lecteur.getPrenomLecteur());
+            stmt.executeUpdate();
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static List<Lecteur> getLecteursFromDB() {
+        String dbURL = "jdbc:mysql://localhost:3306/mabd";
+        String username = "root";
+        String password = "";
+
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+
+        List<Lecteur> lecteurs = new ArrayList<>();
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(dbURL, username, password);
+
+            String sql = "SELECT * FROM lecteurs";
+
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                String nom = rs.getString("nom");
+                String prenom = rs.getString("prenom");
+
+                Lecteur lecteur = new Lecteur(nom, prenom);
+                lecteurs.add(lecteur);
+            }
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return lecteurs;
+    }
+
 }

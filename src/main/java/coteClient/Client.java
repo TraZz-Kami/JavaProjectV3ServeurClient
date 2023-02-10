@@ -1,6 +1,6 @@
 package coteClient;
 
-import Model.Auteur;
+import Model.Lecteur;
 import Model.Livre;
 import coteServeur.Serveur;
 
@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Client {
@@ -60,7 +62,7 @@ public class Client {
         // add code to receive the list of books from the server side
     }
 
-    protected static void addAuteur(){
+    protected static void addLecteur(){
         String prenomAuteur;
         String nomAuteur;
 
@@ -71,12 +73,21 @@ public class Client {
         System.out.print("Le nom de l'auteur: ");
         nomAuteur = sc.nextLine();
 
-        Auteur auteur = new Auteur(prenomAuteur, nomAuteur);
-        // add code to send the object auteur to the server side
+        Lecteur lecteur = new Lecteur(prenomAuteur, nomAuteur);
+       Serveur.addLecteurToDB(lecteur);
     }
 
-    protected static void showAuteurs(){
-        // add code to receive the list of authors from the server side
+    protected static void showLecteurs(){
+        System.out.println();
+        System.out.println("----- Afficher un lecteur -----");
+        List<Lecteur> listLecteur = Serveur.getLecteursFromDB();
+        if(listLecteur.isEmpty()){
+            System.out.println("Il n'y a pas de lecteur d'enregistrer");
+        }else {
+            for (Lecteur lecteur : listLecteur) {
+                System.out.println("| "+ lecteur.getId() + " | " + lecteur.getNomLecteur() + " | " + lecteur.getPrenomLecteur() + " |");
+            }
+        }
     }
 
     protected static void disconnectClient() {

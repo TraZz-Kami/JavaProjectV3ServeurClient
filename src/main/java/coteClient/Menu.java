@@ -1,11 +1,5 @@
 package coteClient;
-import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
-
-import Model.Auteur;
-import Model.User;
-import coteClient.Client;
 
 public class Menu {
     private static Scanner sc = new Scanner(System.in);
@@ -32,24 +26,12 @@ public class Menu {
             sc.nextLine();
 
             switch (userChoice) {
-                case 1:
-                    Client.addLivre();
-                    break;
-                case 2:
-                    Client.showLivres();
-                    break;
-                case 3:
-                    Client.addAuteur();
-                    break;
-                case 4:
-                    Client.showAuteurs();
-                    break;
-                case 5:
-                    Client.disconnectClient();
-                    break;
-                default:
-                    System.out.println("Choix non valide");
-                    break;
+                case 1 -> Client.addLivre();
+                case 2 -> Client.showLivres();
+                case 3 -> Client.addLecteur();
+                case 4 -> Client.showLecteurs();
+                case 5 -> Client.disconnectClient();
+                default -> System.out.println("Choix non valide");
             }
         } while (userChoice != 5);
     }
