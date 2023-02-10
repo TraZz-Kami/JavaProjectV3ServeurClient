@@ -63,22 +63,6 @@ public class Serveur {
         }
 
         System.out.println("Client connected.");
-        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        String inputLine, outputLine;
-
-        while ((inputLine = in.readLine()) != null) {
-            System.out.println("Received message: " + inputLine);
-            outputLine = "ACK: " + inputLine;
-            out.println(outputLine);
-            if (inputLine.equals("Bye."))
-                break;
-        }
-
-        out.close();
-        in.close();
-        clientSocket.close();
-        serverSocket.close();
      }
 
 
