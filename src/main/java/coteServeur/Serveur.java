@@ -1,7 +1,7 @@
 package coteServeur;
 
-import Model.Livre;
-import Model.Lecteur;
+import model.Livre;
+import model.Lecteur;
 
 import java.io.*;
 import java.net.ServerSocket;

@@ -1,15 +1,13 @@
 package coteClient;
 
-import Model.Lecteur;
-import Model.Livre;
+import model.Lecteur;
+import model.Livre;
 import coteServeur.Serveur;
 
 import java.net.Socket;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 

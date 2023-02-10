@@ -1,14 +1,22 @@
 package coteClient;
 import coteServeur.Serveur;
+import thread.threadServeur;
 
 import java.io.IOException;
 import java.util.Scanner;
+
 
 public class Menu {
     private static Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) throws IOException {
-        Serveur.main(null);
+        threadServeur threadServeur = new threadServeur();
+        threadServeur.start();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         int userChoice;
         if (!Client.connectClient()) {
             System.out.println("Failed to connect to the server. Exiting.");

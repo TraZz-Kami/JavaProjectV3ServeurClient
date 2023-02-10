@@ -1,8 +1,4 @@
-package Model;
-
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
+package model;
 
 public class Livre {
 
