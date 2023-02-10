@@ -17,16 +17,7 @@ public class Client {
     private static DataInputStream dis;
     private static DataOutputStream dos;
 
-    public static void main(String[] args) {
-        try {
-            socket = new Socket("localhost", 3307);
-            dis = new DataInputStream(socket.getInputStream());
-            dos = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    // Permet de connecter le client au serveur
     protected static boolean connectClient() {
         try {
             socket = new Socket("localhost", 3307);
@@ -39,6 +30,7 @@ public class Client {
         return true;
     }
 
+    // Permet de créer l'objet Livre avec les inputs utilisateurs
     protected static void addLivre(){
         String titre;
         String auteur;
@@ -58,8 +50,8 @@ public class Client {
         Serveur.addLivreToDB(livre);
     }
 
+    // Permet d'afficher une liste d'objet Livre
     protected static void showLivres(){
-        // add code to receive the list of books from the server side
         System.out.println();
         System.out.println("----- Afficher un livre -----");
         List<Livre> livreList = Serveur.getLivresFromBD();
@@ -72,6 +64,7 @@ public class Client {
         }
     }
 
+    // Permet de créer l'objet Lecteur avec les inputs utilisateurs
     protected static void addLecteur(){
         String prenomAuteur;
         String nomAuteur;
@@ -87,6 +80,7 @@ public class Client {
        Serveur.addLecteurToDB(lecteur);
     }
 
+    // Permet d'afficher une list d'objet Lecteur
     protected static void showLecteurs(){
         System.out.println();
         System.out.println("----- Afficher un lecteur -----");
@@ -100,6 +94,7 @@ public class Client {
         }
     }
 
+    // Permet de déconnecter l'utilisateur et mettre fin au programme
     protected static void disconnectClient() {
         try {
             dis.close();

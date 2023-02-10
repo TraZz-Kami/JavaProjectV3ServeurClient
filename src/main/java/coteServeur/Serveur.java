@@ -23,6 +23,7 @@ public class Serveur {
             serverSocket = new ServerSocket(3307);
             System.out.println("Listening on port : 3307");
 
+            //Créer les tables si ce n'est pas déjà fait
             String requeteCreateLivres = "CREATE TABLE IF NOT EXISTS " +
                     "Livres (" +
                     "ID_Livre " + "INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
@@ -81,6 +82,7 @@ public class Serveur {
      }
 
 
+     // Permet d'ajouter un livre dans la bdd
     public static void addLivreToDB(Livre livre){
 
         PreparedStatement monStatement = null;
@@ -111,6 +113,7 @@ public class Serveur {
         }
     }
 
+    // Permet d'ajouter un lecteur dans la bdd
     public static void addLecteurToDB(Lecteur lecteur){
 
         PreparedStatement stmt = null;
@@ -142,6 +145,7 @@ public class Serveur {
         }
     }
 
+    // Permet de récupérer les lecteurs présent dans la bdd
     public static List<Lecteur> getLecteursFromDB() {
 
         ResultSet rs = null;
@@ -187,6 +191,7 @@ public class Serveur {
         return lecteurs;
     }
 
+    // Permet de récupérer les livres dans la bdd
     public static List<Livre> getLivresFromBD() {
 
         ResultSet rs = null;
