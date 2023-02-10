@@ -48,9 +48,7 @@ public class Serveur {
         } catch (IOException e) {
             System.err.println("Could not listen on port: 3307.");
             System.exit(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 
@@ -82,31 +80,6 @@ public class Serveur {
         serverSocket.close();
      }
 
-     /*private String receiveDataFromClient() {
-         String dataReceived = null;
-         try {
-            // DataInputStream dis = new DataInputStream(socketClient.getInputStream());
-             dataReceived = //dis.readUTF();
-             System.out.println("Data received from client: " + dataReceived);
-         } catch (IOException e) {
-             System.out.println("Error receiving data from client");
-             e.printStackTrace();
-             System.exit(-3);
-         }
-         return dataReceived;
-     }
-
-     private static void sendDataToClient(String dataToSend, DataOutputStream dos) {
-         try {
-             dos.writeUTF(dataToSend);
-             dos.flush();
-             System.out.println("Data sent to client: " + dataToSend);
-         } catch (IOException e) {
-             System.out.println("Error sending data to client");
-             e.printStackTrace();
-             System.exit(-3);
-         }
-     }*/
 
     public static void addLivreToDB(Livre livre){
 
