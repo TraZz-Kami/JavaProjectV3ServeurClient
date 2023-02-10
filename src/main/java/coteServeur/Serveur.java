@@ -11,14 +11,47 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Serveur {
+    static String nomDriverJDBC = "com.mysql.cj.jdbc.Driver";
+    static String urlDB = "jdbc:mysql://localhost:3306/mabd";
+    static Connection maCo = null;
+    static Statement monStatement=null;
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(3307);
             System.out.println("Listening on port : 3307");
+
+            String requeteCreateLivres = "CREATE TABLE IF NOT EXISTS " +
+                    "Livres (" +
+                    "ID_Livre " + "INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+                    "Titre " + "VARCHAR(100)," +
+                    "Auteur " + "VARCHAR(100)," +
+                    "DateEdition " + "DATE" +
+                    ");";
+            String requeteCreateLecteurs = "CREATE TABLE IF NOT EXISTS " +
+                    "Lecteurs (" +
+                    "ID_Lecteur " + "INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT," +
+                    "Nom " + "VARCHAR(100)," +
+                    "Prenom " + "VARCHAR(100)," +
+                    "Livre_Lu " + "VARCHAR(500)" +
+                    ");";
+            Class.forName(nomDriverJDBC);
+            System.out.println("Chargement du Driver : OK");
+
+            maCo = DriverManager.getConnection(urlDB,"root","");
+            System.out.println("Connexion élaborée");
+
+            monStatement = maCo.createStatement();
+            monStatement.executeUpdate(requeteCreateLivres);
+            monStatement.executeUpdate(requeteCreateLecteurs);
+            System.out.println("Requete sans select");
         } catch (IOException e) {
             System.err.println("Could not listen on port: 3307.");
             System.exit(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         }
 
         Socket clientSocket = null;
