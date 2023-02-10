@@ -45,7 +45,7 @@ public class Serveur {
             monStatement = maCo.createStatement();
             monStatement.executeUpdate(requeteCreateLivres);
             monStatement.executeUpdate(requeteCreateLecteurs);
-            System.out.println("Requete sans select");
+            System.out.println("Requete création des tables si elle n'existe pas");
         } catch (IOException e) {
             System.err.println("Could not listen on port: 3307.");
             System.exit(1);
@@ -74,7 +74,7 @@ public class Serveur {
             Class.forName("com.mysql.cj.jdbc.Driver");
             maCo = DriverManager.getConnection(urlDB, usernameDB, passwordDB);
 
-            String sql = "INSERT INTO livres (Titre, Auteur) VALUES (?, ?)";
+            String sql = "INSERT INTO Livres (Titre, Auteur) VALUES (?, ?)";
 
             monStatement = maCo.prepareStatement(sql);
             monStatement.setString(1, livre.getTitre());
@@ -106,7 +106,7 @@ public class Serveur {
             Class.forName("com.mysql.cj.jdbc.Driver");
             maCo = DriverManager.getConnection(urlDB, usernameDB, passwordDB);
 
-            String sql = "INSERT INTO lecteurs (nom, prenom) VALUES (?, ?)";
+            String sql = "INSERT INTO Lecteurs (Nom, Prenom) VALUES (?, ?)";
 
             stmt = maCo.prepareStatement(sql);
             stmt.setString(1, lecteur.getNomLecteur());
@@ -140,7 +140,7 @@ public class Serveur {
             Class.forName("com.mysql.cj.jdbc.Driver");
             maCo = DriverManager.getConnection(urlDB, usernameDB, passwordDB);
 
-            String sql = "SELECT * FROM lecteurs";
+            String sql = "SELECT * FROM Lecteurs";
 
             monStatement = maCo.createStatement();
             rs = monStatement.executeQuery(sql);
@@ -186,7 +186,7 @@ public class Serveur {
             Class.forName("com.mysql.cj.jdbc.Driver");
             maCo = DriverManager.getConnection(urlDB, usernameDB, passwordDB);
 
-            String sql = "SELECT * FROM livres";
+            String sql = "SELECT * FROM Livres";
 
             monStatement = maCo.createStatement();
             rs = monStatement.executeQuery(sql);
